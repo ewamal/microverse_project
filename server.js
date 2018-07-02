@@ -8,6 +8,7 @@ const User = require('./models/user');
 const bcrypt = require('bcrypt');
 const passport = require('passport');
 const BasicStrategy = require('passport-http').BasicStrategy;
+let port = process.env.PORT || 3002;
 
 //mongoose
 let mongoose = require('mongoose');
@@ -28,7 +29,7 @@ app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 if(!module.parent) {
-   app.listen(3002, () => console.log('Example app listening on port 3002!'));
+   app.listen(port, () => console.log('Example app listening on port 3002!'));
 }
 
 passport.use(new BasicStrategy(
