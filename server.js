@@ -11,7 +11,17 @@ const BasicStrategy = require('passport-http').BasicStrategy;
 
 //mongoose
 let mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/microverseproject');
+if(process.env.MONGODB_URI) {
+ mongoose.connect(process.env.MONGODB_URI);
+}else {
+ mongoose.connect('mongodb://localhost:27017/microverseproject', function(err){ //db = 'mongodb://localhost/yourdb'
+  if(err){
+   console.log(err);
+  }else {
+   console.log('mongoose connection is successful on: ' + 'mongodb://localhost:27017/microverseproject');
+  }
+ });
+}
 let db = mongoose.connection;
 
 app.use(bodyParser.json()); // support json encoded bodies
