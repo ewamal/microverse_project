@@ -28,7 +28,7 @@ router.post('/', (req,res) => {
         message: "User with this user name already exists"
       });
     } else {
-      bcrypt.hash(req.body.email, 10, (err,hash) => {
+      bcrypt.hash(req.body.password, 10, (err,hash) => {
         if(err) {
           return res.status(500).json({
             error: err

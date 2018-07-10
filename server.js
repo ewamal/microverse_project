@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const MongoClient = require('mongodb').MongoClient;
 const eventRoutes = require('./routes/events');
@@ -25,16 +26,19 @@ if(process.env.MONGODB_URI) {
 }
 let db = mongoose.connection;
 
+app.use(morgan('dev'));
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 if(!module.parent) {
-   app.listen(port, () => console.log('Example app listening on port 3002!'));
+
+   app.listen(port, () => console.log('Example app listening on port ' + port));
 }
 
 passport.use(new BasicStrategy(
   function(username, password, done) {
     User.findOne({ userName: username }, function (err, user) {
+      console.log(user);
       if (err) { return done(err); }
       if (!user) { return done(null, false); }
       bcrypt.compare(password, user.password, (err, result) => {
@@ -55,6 +59,7 @@ db.once('open', function(err, client) {
  eventRoutes);
   app.use('/users', userRoutes);
   console.log("Connected successfully to server");
+  app.emit('StartedMongodb');
 });
 
 module.exports = {app, db};

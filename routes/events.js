@@ -91,11 +91,6 @@ router.patch('/:id', function(req, res) {
   Event.findById(req.params.id)
   .exec()
   .then(event => {
-    console.log("=====================");
-    console.log(event);
-    console.log(".....................");
-    console.log(typeof event.user);
-    console.log(typeof req.user._id);
       if(event.user && event.user.equals(req.user._id)){
         console.log("Entered if condition");
         Event.updateOne({_id: req.params.id}, {$set: req.body})
