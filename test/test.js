@@ -19,7 +19,7 @@ before(function(done) {
   });
 });
 
-describe('/GET events', () => {
+describe.only('/GET events', () => {
 
   beforeEach(function(done) {                // runs before each test in this block
     let testUser;
@@ -231,7 +231,7 @@ describe('/GET events/:id', () => {
       });
 });
 
-describe.only('/PATCH events/:id', () => {
+describe('/PATCH events/:id', () => {
   let test_Id = new ObjectID();
   let user_Id = new ObjectID();
 
@@ -259,12 +259,10 @@ describe.only('/PATCH events/:id', () => {
           if (err){
             console.log(err);
           }
-          console.log("Inserted test event: ", res);
           db.collection("users").insert(testUser, function(err,res){
             if (err){
               console.log(err);
             }
-            console.log("Inserted testuser: ", res);
             auth = 'Basic ' + Buffer.from('testAdmin' + ':' + 'testAdmin').toString('base64');
             header = {'Authorization': auth};
             done();
@@ -275,7 +273,6 @@ describe.only('/PATCH events/:id', () => {
   });
 
   it('should update an event', (done) => {
-    console.log(" 1.======================================================");
     chai.request(server)
     .patch('/events/' + test_Id).set(header)
     .send({description: "ewa"}).end((err, res) => {
@@ -283,7 +280,6 @@ describe.only('/PATCH events/:id', () => {
       chai.request(server).get('/events/' + test_Id).set(header).end((err, res) => {
         res.should.have.status(200);
         res.body.description.should.equal("ewa");
-        console.log("2.===================================================");
         done();
       });
     });
